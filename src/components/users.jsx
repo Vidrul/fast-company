@@ -40,7 +40,7 @@ const Users = () => {
             <th scope="col">Качества</th>
             <th scope="col">Профессия</th>
             <th scope="col">Встретился,раз</th>
-            <th colSpan="35" scope="col">
+            <th colSpan="2" scope="col">
               Оценка
             </th>
           </tr>
