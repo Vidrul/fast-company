@@ -6,7 +6,7 @@ function SearchBar({ onChange }) {
         <div>
             <input
                 onChange={(e) => onChange(e.target.value)}
-                placeholder="Search..."
+                placeholder="Search by name..."
             />
         </div>
     );
