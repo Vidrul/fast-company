@@ -1,38 +1,66 @@
 import React from "react";
 import PropTypes from "prop-types";
-import User from "./user";
+// import User from "./user";
+import BookMark from "./bookmark";
+import QualitieList from "./qualitieList";
+import Table from "./table";
 
-const UsersTable = ({ count, items, onDelete, onToggleBookMark }) => {
-  return (
-    <table
-      className="table"
-      style={count === 0 ? { opacity: 0 } : { opacity: 1 }}
-    >
-      <thead>
-      <tr>
-        <th scope="col">Имя</th>
-        <th scope="col">Качества</th>
-        <th scope="col">Профессия</th>
-        <th scope="col">Встретился,раз</th>
-        <th scope="col">Оценка</th>
-        <th scope="col">Избранное</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody>
-      {items.map((user) => (
-        <User
-          key={user._id}
-          onDelete={onDelete}
-          onToggleBookMark={onToggleBookMark}
-          user={user}
+const UserTable = ({
+    items,
+    onDelete,
+    onToggleBookMark,
+    selectedSort,
+    onSort
+}) => {
+    const columns = {
+        name: { path: "name", name: "Name" },
+        qualities: {
+            name: "Qualities",
+            component: (user) => <QualitieList qualities={user.qualities} />
+        },
+        professions: { path: "profession.name", name: "Professions" },
+        completedMeetings: {
+            path: "completedMeetings",
+            name: "CompletedMeetings"
+        },
+        rate: { path: "rate", name: "Rating" },
+        bookmark: {
+            path: "bookmark",
+            name: "Bookmark",
+            component: (user) => (
+                <BookMark
+                    onToggleBookMark={onToggleBookMark}
+                    status={user.bookmark}
+                    id={user._id}
+                />
+            )
+        },
+        delete: {
+            component: (user) => (
+                <button
+                    onClick={() => onDelete(user._id)}
+                    type="button"
+                    className="btn btn-outline-danger"
+                >
+                    Удалить
+                </button>
+            )
+        }
+    };
+    return (
+        <Table
+            data={items}
+            columns={columns}
+            selectedSort={selectedSort}
+            onSort={onSort}
         />
-      ))}
-      </tbody>
-    </table>
-  );
+    );
 };
 
-UsersTable.propTypes = {};
+UserTable.propTypes = {
+    users: PropTypes.array,
+    onDelete: PropTypes.func.isRequired,
+    onToggleBookMark: PropTypes.func.isRequired
+};
 
-export default UsersTable;
+export default UserTable;
