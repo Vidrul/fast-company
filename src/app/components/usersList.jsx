@@ -8,7 +8,7 @@ import SearchStatus from "./searchStatus";
 import UserTable from "./userTable";
 import _ from "lodash";
 
-const Users = () => {
+const UsersList = () => {
     const pageSize = 6;
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
@@ -115,10 +115,10 @@ const Users = () => {
     return "loading...";
 };
 
-Users.propTypes = {
+UsersList.propTypes = {
     users: PropTypes.array,
     onDelete: PropTypes.func,
     onToggleBookMark: PropTypes.func
 };
 
-export default Users;
+export default UsersList;
