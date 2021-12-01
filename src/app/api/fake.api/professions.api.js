@@ -7,7 +7,7 @@ export const professionsObject = {
     cook: { _id: "67rdca3eeb7f6fgeed471829", name: "Повар" }
 };
 export const professions = [
-    { name: "Доктор", _id: "67rdca3eeb7f6fgeed471818" },
+    { _id: "67rdca3eeb7f6fgeed471818", name: "Доктор" },
     { _id: "67rdca3eeb7f6fgeed471820", name: "Официант" },
     { _id: "67rdca3eeb7f6fgeed471814", name: "Физик" },
     { _id: "67rdca3eeb7f6fgeed471822", name: "Инженер" },

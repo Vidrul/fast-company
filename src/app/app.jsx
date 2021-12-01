@@ -1,20 +1,33 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import { Redirect } from "react-router";
 
 import Main from "./layout/main";
 import Login from "./layout/login";
 import Users from "./layout/users";
-import NavBar from "./components/navBar";
+import NavBar from "./components/ui/navBar";
+import { ToastContainer } from "react-toastify";
+import ProfessionProvider from "./hooks/useProfessions";
+import QualityProvider from "./hooks/useQualities";
+import AuthProvider from "./hooks/useAuth";
 
 const App = () => {
     return (
         <React.Fragment>
-            <NavBar />
-            <Route path="/users/:userId?" exact component={Users}></Route>
-            <Route path="/login" exact component={Login}></Route>
-            <Route path="/" exact component={Main}></Route>
-            <Redirect to="/" />
+            <AuthProvider>
+                <NavBar />
+                <QualityProvider>
+                    <ProfessionProvider>
+                        <Route
+                            path="/users/:userId?/:edit?"
+                            exact
+                            component={Users}
+                        />
+                        <Route path="/login/:type?" exact component={Login} />
+                        <Route path="/" exact component={Main} />
+                    </ProfessionProvider>
+                </QualityProvider>
+            </AuthProvider>
+            <ToastContainer />
         </React.Fragment>
     );
 };

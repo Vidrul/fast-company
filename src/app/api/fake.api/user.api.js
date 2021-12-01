@@ -32,6 +32,39 @@ const qualities = {
     }
 };
 
+const qualitiesArray = [
+    {
+        _id: "67rdca3eeb7f6fgeed471198",
+        name: "Нудила",
+        color: "primary"
+    },
+    {
+        _id: "67rdca3eeb7f6fgeed471100",
+        name: "Странный",
+        color: "secondary"
+    },
+    {
+        _id: "67rdca3eeb7f6fgeed4711012",
+        name: "Троль",
+        color: "success"
+    },
+    {
+        _id: "67rdca3eeb7f6fgeed471101",
+        name: "Алкоголик",
+        color: "danger"
+    },
+    {
+        _id: "67rdca3eeb7f6fgeed471102",
+        name: "Красавчик",
+        color: "info"
+    },
+    {
+        _id: "67rdca3eeb7f6fgeed471102",
+        name: "Неуверенный",
+        color: "dark"
+    }
+];
+
 const users = [
     {
         _id: "67rdca3eeb7f6fgeed471815",
@@ -146,18 +179,36 @@ const users = [
 const fetchAll = () =>
     new Promise((resolve) => {
         window.setTimeout(function () {
-            resolve(users);
+            resolve(JSON.parse(localStorage.getItem("users")));
         }, 2000);
+    });
+
+if (!localStorage.getItem("users")) {
+    localStorage.setItem("users", JSON.stringify(users));
+}
+
+const update = (id, data) =>
+    new Promise((resolve) => {
+        const users = JSON.parse(localStorage.getItem("users"));
+        const userIndex = users.findIndex((u) => u._id === id);
+        users[userIndex] = { ...users[userIndex], ...data };
+        localStorage.setItem("users", JSON.stringify(users));
+        resolve(users[userIndex]);
     });
 
 const getById = (id) =>
     new Promise((resolve) => {
         window.setTimeout(function () {
-            resolve(users.find((user) => user._id.toString() === id));
+            resolve(
+                JSON.parse(localStorage.getItem("users")).find(
+                    (user) => user._id.toString() === id
+                )
+            );
         }, 2000);
     });
 
 export default {
     fetchAll,
-    getById
+    getById,
+    update
 };

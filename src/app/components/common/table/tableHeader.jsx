@@ -1,6 +1,6 @@
 import React from "react";
-
-const TableHeader = ({ selectedSort, onSort, columns }) => {
+import PropTypes from "prop-types";
+const TableHeader = ({ onSort, selectedSort, columns }) => {
     const handleSort = (item) => {
         if (selectedSort.path === item) {
             onSort({
@@ -10,18 +10,17 @@ const TableHeader = ({ selectedSort, onSort, columns }) => {
         } else {
             onSort({ path: item, order: "asc" });
         }
-
-        console.log(selectedSort);
     };
-
-    const arrow = (
-        <i
-            className={
-                "bi bi-caret-" +
-                (selectedSort.order === "asc" ? "down-fill" : "up-fill")
+    const rendeSortArrow = (selectedSort, currentPath) => {
+        if (selectedSort.path === currentPath) {
+            if (selectedSort.order === "asc") {
+                return <i className="bi bi-caret-down-fill"></i>;
+            } else {
+                return <i className="bi bi-caret-up-fill"></i>;
             }
-        ></i>
-    );
+        }
+        return null;
+    };
 
     return (
         <thead>
@@ -34,18 +33,21 @@ const TableHeader = ({ selectedSort, onSort, columns }) => {
                                 ? () => handleSort(columns[column].path)
                                 : undefined
                         }
-                        scope="col"
                         {...{ role: columns[column].path && "button" }}
+                        scope="col"
                     >
-                        {columns[column].name}
-                        {selectedSort.path === columns[column].path
-                            ? arrow
-                            : null}
+                        {columns[column].name}{" "}
+                        {rendeSortArrow(selectedSort, columns[column].path)}
                     </th>
                 ))}
             </tr>
         </thead>
     );
+};
+TableHeader.propTypes = {
+    onSort: PropTypes.func.isRequired,
+    selectedSort: PropTypes.object.isRequired,
+    columns: PropTypes.object.isRequired
 };
 
 export default TableHeader;
