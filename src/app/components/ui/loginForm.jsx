@@ -8,6 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 const LoginForm = () => {
     const history = useHistory();
+
     const { singIn } = useAuth();
     const [data, setData] = useState({
         email: "",
@@ -31,7 +32,11 @@ const LoginForm = () => {
         if (!isValid) return;
         try {
             await singIn(data);
-            history.push("/");
+            history.push(
+                history.location.state
+                    ? history.location.state.from.pathname
+                    : "/"
+            );
         } catch (error) {
             console.log(error.message);
             setEnterError(error.message);
@@ -42,7 +47,6 @@ const LoginForm = () => {
 
     const validateSchema = yup.object().shape({
         password: yup.string().required("Пароль обязателен для заполнения"),
-
         email: yup
             .string()
             .required("Электронная почта обязательна для заполнения")

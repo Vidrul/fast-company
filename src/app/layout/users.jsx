@@ -16,7 +16,7 @@ const Users = () => {
                     edit ? (
                         <EditUserPage />
                     ) : (
-                        <UserPage id={userId} />
+                        <UserPage />
                     )
                 ) : (
                     <UsersListPage />

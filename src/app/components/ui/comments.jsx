@@ -1,35 +1,21 @@
-import React, { useEffect, useState } from "react";
-import API from "../../api";
-import { useParams } from "react-router-dom";
+import React from "react";
 import _ from "lodash";
 import AddCommentFrom from "../common/comments/addCommentFrom";
 import CommentList from "../common/comments/commenList";
+import { useComments } from "../../hooks/useComments";
 
 const Comments = () => {
-    const { userId } = useParams();
-    const [commentsForUser, setCommentsForUser] = useState([]);
-
-    useEffect(() => {
-        API.comments
-            .fetchCommentsForUser(userId)
-            .then((data) => setCommentsForUser(data));
-    }, []);
+    const { createComment, comments, deleteComment } = useComments();
 
     const handleDelete = (id) => {
-        API.comments.remove(id).then((data) => {
-            setCommentsForUser(
-                commentsForUser.filter((comment) => comment._id !== data)
-            );
-        });
+        deleteComment(id);
     };
 
     const handleSubmit = (data) => {
-        API.comments
-            .add({ ...data, pageId: userId })
-            .then((data) => setCommentsForUser([...commentsForUser, data]));
+        createComment(data);
     };
 
-    const sotedComments = _.orderBy(commentsForUser, ["created_at"], ["desc"]);
+    const sotedComments = _.orderBy(comments, ["created_at"], ["desc"]);
 
     return (
         <>
@@ -42,7 +28,7 @@ const Comments = () => {
                 <div className="card-body ">
                     <h2>Comments</h2>
                     <hr />
-                    {commentsForUser.length !== 0 ? (
+                    {comments.length !== 0 ? (
                         <CommentList
                             comments={sotedComments}
                             onDelete={handleDelete}

@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import API from "../../../api";
-import SelectFiedl from "../form/selectField";
 import * as yup from "yup";
 import TextAreaField from "../form/textAreaField";
-const initialData = { userId: "", content: "" };
 
 const AddCommentFrom = ({ onSubmit }) => {
-    const [data, setData] = useState(initialData);
-    const [users, setUsers] = useState([]);
+    const [data, setData] = useState({});
     const [errors, setErrors] = useState({});
 
     const handleChange = ({ name, value }) => {
@@ -18,8 +14,7 @@ const AddCommentFrom = ({ onSubmit }) => {
     };
 
     const validateSchema = yup.object().shape({
-        content: yup.string().required("Оставьте ваш комментарий"),
-        userId: yup.string().required("Выберите пользователся")
+        content: yup.string().required("Оставьте ваш комментарий")
     });
 
     const validate = () => {
@@ -34,7 +29,7 @@ const AddCommentFrom = ({ onSubmit }) => {
     const isValid = Object.keys(errors).length === 0;
 
     const clearForm = () => {
-        setData(initialData);
+        setData({});
         setErrors({});
     };
     const handleSubmit = (e) => {
@@ -46,29 +41,16 @@ const AddCommentFrom = ({ onSubmit }) => {
     };
 
     useEffect(() => {
-        API.users.fetchAll().then((users) => setUsers(users));
-    }, []);
-
-    useEffect(() => {
         validate();
     }, [data]);
 
     return (
         <form onSubmit={handleSubmit}>
             <h2>New comment</h2>
-            <SelectFiedl
-                value={data.userId}
-                name={"userId"}
-                label=""
-                onChange={handleChange}
-                options={users}
-                defaultOptions={"Выберите пользователя..."}
-                error={errors.userId}
-            />
             <TextAreaField
                 label={"Сообщение"}
                 name={"content"}
-                value={data.content}
+                value={data.content || ""}
                 onChange={handleChange}
                 error={errors.content}
             />

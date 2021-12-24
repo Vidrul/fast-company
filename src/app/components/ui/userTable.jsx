@@ -8,7 +8,6 @@ import Profession from "./profession";
 
 const UserTable = ({
     items,
-    onDelete,
     onToggleBookMark,
     selectedSort,
     onSort
@@ -44,17 +43,6 @@ const UserTable = ({
                     id={user._id}
                 />
             )
-        },
-        delete: {
-            component: (user) => (
-                <button
-                    onClick={() => onDelete(user._id)}
-                    type="button"
-                    className="btn btn-outline-danger"
-                >
-                    Удалить
-                </button>
-            )
         }
     };
     return (
@@ -69,7 +57,6 @@ const UserTable = ({
 
 UserTable.propTypes = {
     users: PropTypes.array,
-    onDelete: PropTypes.func.isRequired,
     onToggleBookMark: PropTypes.func.isRequired
 };
 
