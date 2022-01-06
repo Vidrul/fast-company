@@ -93,15 +93,17 @@ const AuthProvider = ({ children }) => {
 
     async function updateUserData({ email, ...rest }) {
         try {
-            const { data } = await httpAuth.post(`accounts:update`, {
-                idToken: localStorageService.getAccessToken(),
-                email,
-                returnSecureToken: true
-            });
-            localStorageService.setTokens(data);
+            if (currentUser.email !== email) { 
+                const { data } = await httpAuth.post(`accounts:update`, {
+                    idToken: localStorageService.getAccessToken(),
+                    email,
+                    returnSecureToken: true
+                });
+                localStorageService.setTokens(data);
+            }
             const { content } = await userService.update({
                 ...rest,
-                email,
+                email
             });
             setCurrentUser(content);
         } catch (error) {

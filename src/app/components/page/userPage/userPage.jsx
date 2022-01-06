@@ -12,7 +12,6 @@ const UserPage = () => {
     const { getUserById, isLoading } = useUser();
 
     const user = getUserById(userId);
-    console.log(user);
 
     return !isLoading ? (
         <div className="container">

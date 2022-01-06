@@ -10,22 +10,17 @@ import { useQualities } from "../../../hooks/useQualities";
 import { useAuth } from "../../../hooks/useAuth";
 
 const EditUserPage = () => {
-    const { professions } = useProfession();
-    const { qualities } = useQualities();
-    const { currentUser, isLoading, updateUserData } = useAuth();
+    const { professions, isLoading: professionsLoading } = useProfession();
+    const { qualities, isLoading: qualitiesLoading } = useQualities();
+    const { currentUser, updateUserData } = useAuth();
+    const [isLoading, setLoading] = useState(true);
 
     const params = useParams();
     const { userId } = params;
     const history = useHistory();
     const [errors, setErrors] = useState({});
 
-    const [data, setData] = useState({
-        email: "",
-        name: "",
-        profession: "",
-        sex: "male",
-        qualities: []
-    });
+    const [data, setData] = useState();
 
     const handleChange = ({ name, value }) => {
         setData((prevState) => ({
@@ -34,12 +29,23 @@ const EditUserPage = () => {
         }));
     };
 
-    const getQualities = (elements) => {
+    const getQualitiesListByIds = (qualitiesIds) => {
         const arrQualities = [];
-        for (const iterator of elements) {
-            arrQualities.push(iterator.value);
+        for (const qualId of qualitiesIds) {
+            for (const quality of qualities) {
+                if (quality._id === qualId) arrQualities.push(quality);
+            }
         }
         return arrQualities;
+    };
+
+    const transformData = (data) => {
+        const result = getQualitiesListByIds(data).map((qual) => ({
+            label: qual.name,
+            value: qual._id
+        }));
+
+        return result;
     };
 
     const handleSubmit = async (e) => {
@@ -47,9 +53,8 @@ const EditUserPage = () => {
         if (!isValid) return;
         try {
             await updateUserData({
-                ...currentUser,
                 ...data,
-                qualities: getQualities(data.qualities)
+                qualities: data.qualities.map((q) => q.value)
             });
 
             history.replace(`/users/${userId}`);
@@ -79,6 +84,21 @@ const EditUserPage = () => {
     };
 
     const isValid = Object.keys(errors).length === 0;
+
+    useEffect(() => {
+        if (!professionsLoading && !qualitiesLoading && currentUser && !data) {
+            setData({
+                ...currentUser,
+                qualities: transformData(currentUser.qualities)
+            });
+        }
+    }, [currentUser, data, professionsLoading, qualitiesLoading]);
+
+    useEffect(() => {
+        if (data && isLoading) {
+            setLoading(false);
+        }
+    }, [data]);
 
     useEffect(() => {
         validate();

@@ -20,6 +20,7 @@ const UsersListPage = () => {
 
     const { users } = useUser();
     const { currentUser } = useAuth();
+    
     const handleDelete = (id) => {
         // setUsers(users.filter((user) => user._id !== usersId));
         console.log(id);

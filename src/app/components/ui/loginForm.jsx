@@ -8,7 +8,6 @@ import { useAuth } from "../../hooks/useAuth";
 
 const LoginForm = () => {
     const history = useHistory();
-
     const { singIn } = useAuth();
     const [data, setData] = useState({
         email: "",

@@ -2,19 +2,8 @@ import React from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 
-const MultiSelectField = ({
-    onChange,
-    options,
-    name,
-    label,
-    defaultValue = []
-}) => {
+const MultiSelectField = ({ onChange, options, name, label, defaultValue }) => {
     const optionsArray = options.map((option) => ({
-        label: option.name,
-        value: option._id
-    }));
-
-    const optionsDefaultArray = defaultValue.map((option) => ({
         label: option.name,
         value: option._id
     }));
@@ -34,7 +23,7 @@ const MultiSelectField = ({
                 options={optionsArray}
                 onChange={handleChange}
                 name={name}
-                defaultValue={optionsDefaultArray}
+                defaultValue={defaultValue}
             />
         </div>
     );
