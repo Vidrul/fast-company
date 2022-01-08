@@ -1,5 +1,5 @@
 import React from "react";
-import Qualities from ".";
+import QualitiesList from "./index";
 
 const QualitiesCard = ({ qualities }) => {
     return (
@@ -9,7 +9,7 @@ const QualitiesCard = ({ qualities }) => {
                     <span>Qualities</span>
                 </h5>
                 <p className="card-text">
-                    <Qualities qualities={qualities} />
+                    <QualitiesList qualities={qualities} />
                 </p>
             </div>
         </div>

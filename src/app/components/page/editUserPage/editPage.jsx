@@ -4,20 +4,30 @@ import RadioField from "../../common/form/radioField";
 import * as yup from "yup";
 import SelectFiedl from "../../common/form/selectField";
 import MultiSelectField from "../../common/form/multiSelectField";
-import { useParams, useHistory } from "react-router-dom";
-import { useProfession } from "../../../hooks/useProfessions";
-import { useQualities } from "../../../hooks/useQualities";
-import { useAuth } from "../../../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    getQualities,
+    getQualitiesLoadingStatus
+} from "../../../store/qualities";
+import {
+    getProfessionsList,
+    getProfessionsLoadStatus
+} from "../../../store/professions";
+import { getCurrentUserData, updateUserData } from "../../../store/users";
 
 const EditUserPage = () => {
-    const { professions, isLoading: professionsLoading } = useProfession();
-    const { qualities, isLoading: qualitiesLoading } = useQualities();
-    const { currentUser, updateUserData } = useAuth();
+    const dispatch = useDispatch();
+
+    const professions = useSelector(getProfessionsList());
+    const professionsLoading = useSelector(getProfessionsLoadStatus());
+
+    const currentUser = useSelector(getCurrentUserData());
+
     const [isLoading, setLoading] = useState(true);
 
-    const params = useParams();
-    const { userId } = params;
-    const history = useHistory();
+    const qualities = useSelector(getQualities());
+    const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
+
     const [errors, setErrors] = useState({});
 
     const [data, setData] = useState();
@@ -48,17 +58,14 @@ const EditUserPage = () => {
         return result;
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!isValid) return;
-        try {
-            await updateUserData({
-                ...data,
-                qualities: data.qualities.map((q) => q.value)
-            });
-
-            history.replace(`/users/${userId}`);
-        } catch (error) {}
+        const newData = {
+            ...data,
+            qualities: data.qualities.map((q) => q.value)
+        };
+        dispatch(updateUserData(newData));
     };
 
     const validateSchema = yup.object().shape({

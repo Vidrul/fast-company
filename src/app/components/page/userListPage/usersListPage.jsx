@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../../common/pagination";
 import { paginate } from "../../../utils/pagination";
-import PropTypes, { func } from "prop-types";
+import PropTypes from "prop-types";
 import GroupList from "./../../common/groupList";
 import SearchStatus from "./../../ui/searchStatus";
 import UserTable from "./../../ui/userTable";
 import _ from "lodash";
-import { useUser } from "../../../hooks/useUsers";
-import { useProfession } from "../../../hooks/useProfessions";
-import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import {
+    getProfessionsList,
+    getProfessionsLoadStatus
+} from "../../../store/professions";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
-    const { professions, isLoading: professionsLoadig } = useProfession();
+    const professions = useSelector(getProfessionsList());
+    const professionsLoadig = useSelector(getProfessionsLoadStatus());
     const pageSize = 6;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const [searchQuery, setSearchQuery] = useState("");
 
-    const { users } = useUser();
-    const { currentUser } = useAuth();
-    
+    const users = useSelector(getUsersList());
+    const currentUserId = useSelector(getCurrentUserId());
+
     const handleDelete = (id) => {
         // setUsers(users.filter((user) => user._id !== usersId));
         console.log(id);
@@ -74,7 +78,7 @@ const UsersListPage = () => {
                   )
                 : data;
 
-            return filteredUsers.filter((user) => user._id !== currentUser._id);
+            return filteredUsers.filter((user) => user._id !== currentUserId);
         }
 
         const filteredUsers = filterUsers(users);

@@ -1,7 +1,7 @@
 import React from "react";
-import { useAuth } from "../../../hooks/useAuth";
-import { useUser } from "../../../hooks/useUsers";
 import { displayDate } from "../../../utils/displayDate";
+import { useSelector } from "react-redux";
+import { getCurrentUserId, getUserById } from "../../../store/users";
 
 const Comment = ({
     content,
@@ -10,9 +10,9 @@ const Comment = ({
     created_at: created,
     _id: id
 }) => {
-    const { getUserById } = useUser();
-    const { currentUser } = useAuth();
-    const user = getUserById(userId);
+    const currentUserId = useSelector(getCurrentUserId());
+
+    const user = useSelector(getUserById(userId));
 
     return (
         <div className="bg-light card-body  mb-3">
@@ -35,7 +35,7 @@ const Comment = ({
                                             {displayDate(created)}
                                         </span>
                                     </p>
-                                    {currentUser._id === userId ? (
+                                    {currentUserId === userId ? (
                                         <button
                                             className="btn btn-sm text-primary d-flex align-items-center"
                                             onClick={() => onDelete(id)}

@@ -1,14 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
-import { useProfession } from "../../hooks/useProfessions";
+import { getCurrentUserId } from "../../store/users";
+import Profession from "./profession";
 
 const UserCard = ({ user }) => {
     const history = useHistory();
-    const { currentUser } = useAuth();
-    const { getProfession, isLoading } = useProfession();
 
-    const profession = getProfession(user.profession);
+    const currentUserId = useSelector(getCurrentUserId());
 
     const handleClick = () => {
         history.push(`/users/${user._id}/edit`);
@@ -17,7 +16,7 @@ const UserCard = ({ user }) => {
     return (
         <div className="card mb-3">
             <div className="card-body">
-                {currentUser._id === user._id && (
+                {currentUserId === user._id && (
                     <button
                         className="position-absolute top-0 end-0 btn btn-light btn-sm"
                         onClick={handleClick}
@@ -36,9 +35,7 @@ const UserCard = ({ user }) => {
                     />
                     <div className="mt-3">
                         <h4>{user.name}</h4>
-                        <p className="text-secondary mb-1">
-                            {!isLoading ? profession.name : "Loading ..."}
-                        </p>
+                        <Profession id={user.profession} />
                         <div className="text-muted">
                             <i
                                 className="bi bi-caret-down-fill text-primary"

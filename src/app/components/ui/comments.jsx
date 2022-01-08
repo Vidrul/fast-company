@@ -1,18 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import _ from "lodash";
 import AddCommentFrom from "../common/comments/addCommentFrom";
 import CommentList from "../common/comments/commenList";
-import { useComments } from "../../hooks/useComments";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    createComment,
+    getCommentsList,
+    getCommentsLoadStatus,
+    loadCommentsList,
+    removeComment
+} from "../../store/comments";
+import { useParams } from "react-router-dom";
+import { nanoid } from "nanoid";
+import { getCurrentUserId } from "../../store/users";
 
 const Comments = () => {
-    const { createComment, comments, deleteComment } = useComments();
+    const { userId } = useParams();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(loadCommentsList(userId));
+    }, [userId]);
+
+    const comments = useSelector(getCommentsList());
+    const isLoading = useSelector(getCommentsLoadStatus());
+    const currentUserId = useSelector(getCurrentUserId());
 
     const handleDelete = (id) => {
-        deleteComment(id);
+        dispatch(removeComment(id));
     };
 
     const handleSubmit = (data) => {
-        createComment(data);
+        dispatch(
+            createComment({
+                ...data,
+                _id: nanoid(),
+                pageId: userId,
+                created_at: Date.now(),
+                userId: currentUserId
+            })
+        );
     };
 
     const sotedComments = _.orderBy(comments, ["created_at"], ["desc"]);
@@ -28,13 +55,13 @@ const Comments = () => {
                 <div className="card-body ">
                     <h2>Comments</h2>
                     <hr />
-                    {comments.length !== 0 ? (
+                    {!isLoading ? (
                         <CommentList
                             comments={sotedComments}
                             onDelete={handleDelete}
                         />
                     ) : (
-                        "No comments."
+                        "Loading ..."
                     )}
                 </div>
             </div>
