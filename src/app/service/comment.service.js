@@ -18,6 +18,7 @@ const commentService = {
                 equalTo: `"${pageId}"`
             }
         });
+        console.log(data);
         return data;
     },
 

@@ -1,11 +1,11 @@
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { getIsLoggedIn } from "../../store/users";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ component: Component, children, ...rest }) => {
-
+    const loaction = useLocation();
     const isLoggedIn = useSelector(getIsLoggedIn());
 
 
@@ -18,7 +18,7 @@ const ProtectedRoute = ({ component: Component, children, ...rest }) => {
                         <Redirect
                             to={{
                                 pathname: "/login",
-                                state: { from: props.location }
+                                state: { from: loaction }
                             }}
                         />
                     );

@@ -6,14 +6,17 @@ import GroupList from "./../../common/groupList";
 import SearchStatus from "./../../ui/searchStatus";
 import UserTable from "./../../ui/userTable";
 import _ from "lodash";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     getProfessionsList,
     getProfessionsLoadStatus
 } from "../../../store/professions";
 import { getCurrentUserId, getUsersList } from "../../../store/users";
+import { addBookMark, removeBookMark } from "../../../store/bookMark";
+import { nanoid } from "nanoid";
 
 const UsersListPage = () => {
+    const dispatch = useDispatch();
     const professions = useSelector(getProfessionsList());
     const professionsLoadig = useSelector(getProfessionsLoadStatus());
     const pageSize = 6;
@@ -30,15 +33,19 @@ const UsersListPage = () => {
         console.log(id);
     };
 
-    const handleToggleBookMark = (id) => {
-        const newArray = users.map((user) => {
-            if (user._id === id) {
-                return { ...user, bookmark: !user.bookmark };
-            }
-            return user;
-        });
+    const handleRemoveBookMark = (id) => {
+        dispatch(removeBookMark(id));
+    };
 
-        console.log(newArray);
+    const handleAppendBookMark = (id) => {
+        dispatch(
+            addBookMark({
+                _id: nanoid(),
+                authUser: currentUserId,
+                userId: id,
+                created_at: Date.now()
+            })
+        );
     };
 
     const handlePageChange = (pageIndex) => {
@@ -54,13 +61,12 @@ const UsersListPage = () => {
     };
 
     const handleProfessionSelect = (item) => {
-        console.log(item);
         if (searchQuery !== "") setSearchQuery("");
         setSelectedProf(item);
     };
 
     const handleSearchQuery = ({ target }) => {
-        // setSelectedProf(undefined);
+        setSelectedProf(undefined);
         setSearchQuery(target.value);
     };
 
@@ -74,7 +80,7 @@ const UsersListPage = () => {
                   )
                 : selectedProf
                 ? data.filter((user) =>
-                      _.isEqual(user.profession, selectedProf)
+                      _.isEqual(user.profession, selectedProf._id)
                   )
                 : data;
 
@@ -127,7 +133,8 @@ const UsersListPage = () => {
                             items={usersCrop}
                             selectedSort={sortBy}
                             onDelete={handleDelete}
-                            onToggleBookMark={handleToggleBookMark}
+                            appendBookMark={handleAppendBookMark}
+                            removeBoomark={handleRemoveBookMark}
                             onSort={handleSort}
                         />
                     )}

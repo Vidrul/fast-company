@@ -8,9 +8,10 @@ import Profession from "./profession";
 
 const UserTable = ({
     items,
-    onToggleBookMark,
+    appendBookMark,
     selectedSort,
-    onSort
+    onSort,
+    removeBoomark
 }) => {
     const columns = {
         name: {
@@ -38,8 +39,8 @@ const UserTable = ({
             name: "Bookmark",
             component: (user) => (
                 <BookMark
-                    onToggleBookMark={onToggleBookMark}
-                    status={user.bookmark}
+                    AppendBookMark={appendBookMark}
+                    removeBoomark={removeBoomark}
                     id={user._id}
                 />
             )
@@ -57,7 +58,8 @@ const UserTable = ({
 
 UserTable.propTypes = {
     users: PropTypes.array,
-    onToggleBookMark: PropTypes.func.isRequired
+    appendBookMark: PropTypes.func.isRequired,
+    removeBoomark: PropTypes.func.isRequired
 };
 
 export default UserTable;

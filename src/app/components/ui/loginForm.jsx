@@ -31,7 +31,14 @@ const LoginForm = () => {
         const redirect = history.location.state
             ? history.location.state.from.pathname
             : "/";
-        dispatch(logIn({ payload: data, redirect }));
+        dispatch(
+            logIn({
+                payload: data,
+                redirect: () => {
+                    history.push(redirect);
+                }
+            })
+        );
     };
 
     const isValid = Object.keys(errors).length === 0;

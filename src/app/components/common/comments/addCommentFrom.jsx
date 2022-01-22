@@ -42,7 +42,7 @@ const AddCommentFrom = ({ onSubmit }) => {
 
     useEffect(() => {
         validate();
-    }, [data]);
+    }, [data, validate]);
 
     return (
         <form onSubmit={handleSubmit}>

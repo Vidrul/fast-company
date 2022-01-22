@@ -11,6 +11,7 @@ import {
 } from "../../../store/users";
 
 const AppLoader = ({ children }) => {
+    console.log("render");
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(getIsLoggedIn());
     const userStatusLoading = useSelector(getUsersLoadingStatus());

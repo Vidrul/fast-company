@@ -1,9 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { getBookMarksById } from "../../store/bookMark";
 
-const BookMark = ({ status, onToggleBookMark, id }) => {
+const BookMark = ({ AppendBookMark, id, removeBoomark }) => {
+    const status = useSelector(getBookMarksById(id));
+
     return (
-        <button onClick={() => onToggleBookMark(id)} type="button">
+        <button
+            onClick={
+                status
+                    ? () => removeBoomark(status._id)
+                    : () => AppendBookMark(id)
+            }
+            type="button"
+        >
             <i className={"bi bi-heart" + (status ? "-fill" : "")} />
         </button>
     );
@@ -11,7 +22,8 @@ const BookMark = ({ status, onToggleBookMark, id }) => {
 
 BookMark.propTypes = {
     status: PropTypes.bool,
-    onToggleBookMark: PropTypes.func.isRequired,
+    appendBookMark: PropTypes.func,
+    removeBoomark: PropTypes.func,
     id: PropTypes.string.isRequired
 };
 export default BookMark;

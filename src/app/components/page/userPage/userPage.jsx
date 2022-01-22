@@ -3,7 +3,6 @@ import UserCard from "./../../ui/userCard";
 import QualitiesCard from "../../ui/qualities/qualitiesCard";
 import MeetingsCard from "../../ui/meetingsCard";
 import Comments from "./../../ui/comments";
-import CommentsProvider from "../../../hooks/useComments";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getUserById, getUsersLoadStatus } from "../../../store/users";

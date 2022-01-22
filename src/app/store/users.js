@@ -118,7 +118,7 @@ export const logIn =
                     email: payload.email
                 })
             );
-            history.push(redirect);
+            redirect();
         } catch (error) {
             const { code, message } = error.response.data.error;
             if (code === 400) {
